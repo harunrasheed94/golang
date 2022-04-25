@@ -14,7 +14,7 @@ Each goroutine computes and writes its result to its own channel.
 Fan-in is the process of merging results from channels of these different goroutines into a single channel.
 Thus by using the fanout-fanin concurrent design pattern, you can split the task into multiple subtasks and assign each subtask to a goroutine (Fan-out) which
 writes the results into its own channel. Finally results from different channels are combined into a single channel (Fanin). (Fanout-fanin can also be called
-as split and merge.)
+as split and merge like merge sort.)
 */
 type Person struct {
 	name string
