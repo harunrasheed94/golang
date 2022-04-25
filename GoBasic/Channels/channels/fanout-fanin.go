@@ -81,7 +81,7 @@ func DemoFanOutFanIn() {
 
 /*'fanOut' distributes the tasks among the 25 worker (goroutine) functions by starting each of the 25 worker goroutines. It has one goroutine running to put the tasks in the consume channel.
 Each task (i.e. each person from the persons array) is put in the consume channel by the one running goroutine in fanOut and closes the 'consume' channel once
-all the tasks have been consumed by each of the worker goroutine and stops running and exits.
+all the tasks have been consumed by each of the worker goroutine and exits.
 */
 func fanOut(persons []Person) []<-chan string {
 	consumeChannel := make(chan Person)
@@ -126,7 +126,7 @@ func worker(consume <-chan Person, id int) <-chan string {
 }
 
 /*'fanIn' is used to merge the results from each of the 'worker' goroutine's channel and write it into a common channel.
-'fanIn' spawns as many goroutines as worker goroutines. Each spawned goroutine merges the result from each worker's channel to the final channel. Once each spawned goroutine
+'fanIn' spawns as many goroutines as number of worker goroutines. Each spawned goroutine merges the result from each worker's channel to the final channel. Once each spawned goroutine
 has completely consumed from its respective worker's channel (and the worker's channel has closed), it exits.
 Waitgroups are used to ensure that 'fanIn' method exits only after each of the goroutine merging the results has finished execution.
 */
