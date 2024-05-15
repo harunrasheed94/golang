@@ -1,30 +1,31 @@
 package main
 
-import(
+import (
 	"fmt"
 )
 
-type person struct{
+type person struct {
 	first string
-	last string
-	age int
+	last  string
+	age   int
 }
 
-type secretagent struct{
+type secretagent struct {
 	person
 	ltk bool
 }
 
-func main(){
+func main() {
+
 	p1 := person{
 		first: "James",
-		last: "Bond",
-		age: 35,
+		last:  "Bond",
+		age:   35,
 	}
 
 	sa := secretagent{
 		person: p1,
-		ltk: true,
+		ltk:    true,
 	}
 
 	fmt.Println(p1.first)

@@ -2,35 +2,35 @@ package main
 
 import (
 	"fmt"
-	"runtime"
 	"sync"
 )
 
 /*
-This code has a race condition as many goroutines are accessing a shared variable 'counter'. Using mutex fixes the race condition as each goroutine locks the section
-and unlocks it only after updating the variable
+	This code has a race condition as many goroutines are accessing a shared variable 'counter'. Using mutex fixes the race condition as each goroutine locks the section
+	and unlocks it only after updating the variable
 */
+
 var counter = 0
+
+const noOfGoroutines int = 1000
 
 func main() {
 	wg := new(sync.WaitGroup)
 	mutex := new(sync.Mutex)
-	fmt.Println("CPU = ", runtime.NumCPU())
-	const numberGoRoutine = 100
-	wg.Add(numberGoRoutine)
-	for i := 0; i < numberGoRoutine; i++ {
-		go incrementcounter(wg, mutex)
+
+	for i := 0; i < noOfGoroutines; i++ {
+		wg.Add(1)
+		go incrementCounter(wg, mutex)
 	}
 	wg.Wait()
-	fmt.Println("Counter = ", counter)
+	fmt.Println(counter)
 }
 
-func incrementcounter(wg *sync.WaitGroup, mutex *sync.Mutex) {
+func incrementCounter(wg *sync.WaitGroup, mutex *sync.Mutex) {
+	defer wg.Done()
 	mutex.Lock()
+	defer mutex.Unlock()
 	v := counter
-	//runtime.Gosched()
 	v++
 	counter = v
-	wg.Done()
-	mutex.Unlock()
 }

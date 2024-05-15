@@ -16,16 +16,16 @@ even numbers.
 func main() {
 	allNumSlice := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
 
-	fmt.Println(calcevensum(sum, allNumSlice...))
-}
-
-//function to calculate the sum
-func sum(x ...int) (total int) {
-
-	for _, v := range x {
-		total += v
+	//callback function
+	sum := func(x ...int) int {
+		total := 0
+		for _, v := range x {
+			total += v
+		}
+		return total
 	}
-	return total
+
+	fmt.Println(calcevensum(sum, allNumSlice...))
 }
 
 /*

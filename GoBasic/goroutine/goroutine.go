@@ -1,34 +1,50 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"runtime"
 	"sync"
 )
 
+type Person struct {
+	Name string `json:"name"`
+	Age  int    `json:"age"`
+}
+
+const eligibleAge int = 18
+
 func main() {
-	wg := new(sync.WaitGroup) //wg is of *sync.WaitGroup type
-	wg.Add(2)
-	fmt.Println("OS = ", runtime.GOOS)
-	fmt.Println("Number of CPUs = ", runtime.NumCPU())
+	wg := new(sync.WaitGroup)
 
-	go printAlphabets(wg) //WaitGroup should ONLY BE PASSED AS A POINTER
-	go printNumbers(wg)   //WaitGroup should ONLY BE PASSED AS A POINTER
-	fmt.Println("Number of Go Routines = ", runtime.NumGoroutine())
-	fmt.Println("Main finished execution")
+	p := &Person{
+		Name: "Haroon",
+		Age:  23,
+	}
+
+	noOfGoroutines := 2
+	wg.Add(noOfGoroutines)
+	go printPersonJSON(wg, p)
+	go checkIfPersonEligibleForDriving(wg, p)
 	wg.Wait()
+	fmt.Println("Goroutines finished")
 }
 
-func printAlphabets(wg *sync.WaitGroup) {
-	for c := 97; c < 107; c++ {
-		fmt.Printf(" %c ", c)
+func printPersonJSON(wg *sync.WaitGroup, p *Person) {
+	defer wg.Done()
+	personBytes, err := json.Marshal(p)
+	if err != nil {
+		fmt.Println("Error in converting to json")
+		return
 	}
-	wg.Done()
+
+	fmt.Println("json: ", string(personBytes))
 }
 
-func printNumbers(wg *sync.WaitGroup) {
-	for i := 0; i < 10; i++ {
-		fmt.Printf("%d ", i+1)
+func checkIfPersonEligibleForDriving(wg *sync.WaitGroup, p *Person) {
+	defer wg.Done()
+	if p.Age < eligibleAge {
+		fmt.Println("Person ", p.Name, " can't drive")
+		return
 	}
-	wg.Done()
+	fmt.Println("Person ", p.Name, " can drive")
 }
