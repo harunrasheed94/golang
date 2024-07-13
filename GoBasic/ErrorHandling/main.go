@@ -6,8 +6,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-
-	"github.com/pkg/errors"
 )
 
 /*
@@ -37,13 +35,13 @@ func main() {
 	}
 }
 
-//OpenCSV opens csv file
+// OpenCSV opens csv file
 func OpenCSV(filePath string) (*os.File, error) {
 
 	csvfile, err := os.Open(filePath)
 
 	if err != nil {
-		errors.Wrap("", err)
+		fmt.Errorf("OpenCSV: %w", err)
 		fmt.Println("error in opening file. Error = ", err)
 		return nil, err
 	}
@@ -51,7 +49,7 @@ func OpenCSV(filePath string) (*os.File, error) {
 	return csvfile, nil
 }
 
-//ProcessCSV processes csv file
+// ProcessCSV processes csv file
 func ProcessCSV(csvfile *os.File) error {
 	csvReader := csv.NewReader(csvfile)
 	csvReader.FieldsPerRecord = -1 //FieldsPerRecords should be set to negative so that each record can have any number of fields (i.e. variable number of columns)

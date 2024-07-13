@@ -52,12 +52,15 @@ func DemoFanOutFanIn() {
 func FanOut(arr1 []int) []chan int {
 	var resultChannels []chan int
 	taskCh := make(chan int)
+
+	//START THE WORKER GOROUTINE
 	for i := 0; i < noOfGoRoutines; i++ {
-		ch := make(chan int)
-		resultChannels = append(resultChannels, ch)
-		go Worker(taskCh, ch)
+		resultCh := make(chan int)
+		resultChannels = append(resultChannels, resultCh)
+		go Worker(taskCh, resultCh)
 	}
 
+	//START ASSIGNING TASKS to each Worker goroutine
 	go func() {
 		defer close(taskCh)
 		for _, val := range arr1 {
