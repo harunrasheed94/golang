@@ -77,7 +77,7 @@ func main() {
 	wg := &sync.WaitGroup{}
 	wg.Add(2)
 	fileScanner := bufio.NewScanner(file)
-	fileScanner.Split(bufio.ScanLines)
+	//	fileScanner.Split(bufio.ScanLines)
 	ch := make(chan int)
 	go Producer(q, wg, fileScanner, ch)
 	go Consumer(q, wg, ch)
@@ -110,9 +110,11 @@ func Producer(q *Queue, wg *sync.WaitGroup, fileScanner *bufio.Scanner, ch chan 
 	}
 }
 
-/*Consumer consumes from the queue to which the producer produces.
+/*
+Consumer consumes from the queue to which the producer produces.
 Producer writes to the channel after it produces every record which the Consumer listens to.
-Consumer starts consuming only after producer has produced.*/
+Consumer starts consuming only after producer has produced.
+*/
 func Consumer(q *Queue, wg *sync.WaitGroup, ch chan int) {
 	defer wg.Done()
 	for {
